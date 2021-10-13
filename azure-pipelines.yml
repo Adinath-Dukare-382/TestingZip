@@ -45,7 +45,7 @@ steps:
     rootFolderOrFile: '$(Build.SourcesDirectory)'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(DropLocation)/$(BuildVersion).zip'
+    archiveFile: '$(DropLocation)\$(BuildVersion).zip'
     replaceExistingArchive: true
 
 # - task: PublishBuildArtifacts@1

@@ -1,0 +1,64 @@
+trigger:
+ - main
+ - development
+ 
+variables:
+
+  ${{ if and(eq(variables['Build.SourceBranchName'], 'main'), ne(variables['Build.Reason'], 'PullRequest')) }}:
+    DropLocation: C:\Users\A888382\Documents\Testing1
+    RevisionVersionMain : $[counter(variables['RevisionVersionMain'],0)]
+    BuildVersion: $(MajorVersionMain).$(MinorVersionMain).$(RevisionVersionMain)
+
+  ${{ if and(eq(variables['Build.SourceBranchName'], 'development'), ne(variables['Build.Reason'], 'PullRequest')) }}:
+    DropLocation: C:\Users\A888382\Documents\Testing2
+    RevisionVersion : $[counter(variables['RevisionVersion'],0)]
+    BuildVersion: $(MajorVersion).$(MinorVersion).$(RevisionVersion) 
+
+steps:
+- powershell: |
+    Write-Verbose -Verbose "##vso[build.updatebuildnumber]$(BuildVersion)"
+  displayName: Update Build Number
+            
+- checkout: self
+  displayName: 'Download Files From Repository'
+
+
+- task: CopyFiles@2
+  displayName: 'Copy Readme.txt File '
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)'
+    Contents: 'test.txt'
+    TargetFolder: '$(DropLocation)'
+    OverWrite: true
+
+- task: DeleteFiles@1
+  displayName: 'Remove All Pipeline File'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: |
+     *.yml
+     test.txt
+    RemoveDotFiles: true
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(DropLocation)/$(RevisionVersion).zip'
+    replaceExistingArchive: true
+
+# - task: PublishBuildArtifacts@1
+#   displayName: Publish zip file
+#   inputs:
+#     PathtoPublish: 'DropLocation'
+#     ArtifactName: OptimusTool'$(BuildVersion).zip'
+#     publishLocation: 'FilePath'
+#     TargetPath: DropLocation
+
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#     ArtifactName: 'yml-infra.txt'
+#     publishLocation: 'FilePath'
+#     TargetPath: DropLocation

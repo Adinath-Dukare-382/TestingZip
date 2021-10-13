@@ -6,12 +6,14 @@ variables:
 
   ${{ if and(eq(variables['Build.SourceBranchName'], 'main'), ne(variables['Build.Reason'], 'PullRequest')) }}:
     DropLocation: C:\Users\A888382\Documents\Testing1
-    RevisionVersionMain : $[counter(variables['RevisionVersionMain'],0)]
+    RevisionVersionMain: $[counter(format('{0}.{1}.{2}',variables['MajorVersionMain'],variables['MinorVersionMain'],variables['RevisionVersionMain']), 0)]
+    # RevisionVersionMain : $[counter(variables['RevisionVersionMain'],0)]
     BuildVersion: $(MajorVersionMain).$(MinorVersionMain).$(RevisionVersionMain)
 
   ${{ if and(eq(variables['Build.SourceBranchName'], 'development'), ne(variables['Build.Reason'], 'PullRequest')) }}:
     DropLocation: C:\Users\A888382\Documents\Testing2
-    RevisionVersion : $[counter(variables['RevisionVersion'],0)]
+    RevisionVersionMain: $[counter(format('{0}.{1}.{2}',variables['MajorVersion'],variables['MinorVersion'],variables['RevisionVersion']), 0)]
+    # RevisionVersion : $[counter(variables['RevisionVersion'],0)]
     BuildVersion: $(MajorVersion).$(MinorVersion).$(RevisionVersion) 
 
 steps:

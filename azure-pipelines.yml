@@ -3,7 +3,6 @@ trigger:
  - development
  
 variables:
-
   ${{ if and(eq(variables['Build.SourceBranchName'], 'main'), ne(variables['Build.Reason'], 'PullRequest')) }}:
     DropLocation: C:\Users\A888382\Documents\Testing1
     RevisionVersionMain: $[counter(format('{0}.{1}.{2}',variables['MajorVersionMain'],variables['MinorVersionMain'],variables['RevisionVersionMain']), 0)]

@@ -23,13 +23,13 @@ steps:
   displayName: 'Download Files From Repository'
 
 
-- task: CopyFiles@2
-  displayName: 'Copy Readme.txt File '
-  inputs:
-    SourceFolder: '$(build.sourcesdirectory)'
-    Contents: 'test.txt'
-    TargetFolder: '$(DropLocation)'
-    OverWrite: true
+# - task: CopyFiles@2
+#   displayName: 'Copy Readme.txt File '
+#   inputs:
+#     SourceFolder: '$(build.sourcesdirectory)'
+#     Contents: 'test.txt'
+#     TargetFolder: '$(DropLocation)'
+#     OverWrite: true
 
 - task: DeleteFiles@1
   displayName: 'Remove All Pipeline File'
@@ -37,7 +37,7 @@ steps:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: |
      *.yml
-     test.txt
+    #  test.txt
     RemoveDotFiles: true
 
 - task: ArchiveFiles@2
@@ -45,7 +45,7 @@ steps:
     rootFolderOrFile: '$(Build.SourcesDirectory)'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(DropLocation)\$(BuildVersion).zip'
+    archiveFile: '$(DropLocation)/$(BuildVersion).zip'
     replaceExistingArchive: true
 
 # - task: PublishBuildArtifacts@1
